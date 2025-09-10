@@ -1,5 +1,8 @@
 # Kundaliel's Formatting Library
 
+[![PyPI version](https://badge.fury.io/py/formatting-library.svg)](https://badge.fury.io/py/formatting-library)
+[![Python versions](https://img.shields.io/pypi/pyversions/formatting-library.svg)](https://pypi.org/project/formatting-library/)
+
 A Python library for terminal text formatting, colors, and ASCII art rendering.
 
 ## Features

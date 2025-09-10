@@ -32,9 +32,10 @@ dependencies = [
 requires-python = ">=3.8"
 
 [project.urls]
-Homepage = "https://github.com/Kundaliel/terminal-formatter"
-Repository = "https://github.com/Kundaliel/terminal-formatter"
-Issues = "https://github.com/Kundaliel/terminal-formatter/issues"
+Homepage = "https://github.com/Kundaliel/terminal_formatter"
+Repository = "https://github.com/Kundaliel/terminal_formatter"
+Issues = "https://github.com/Kundaliel/terminal_formatter/issues"
+PyPI = "https://pypi.org/project/formatting-library/"
 
 [project.optional-dependencies]
 dev = [
