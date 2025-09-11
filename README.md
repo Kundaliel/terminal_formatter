@@ -17,7 +17,7 @@ A Python library for terminal text formatting, colors, and ASCII art rendering.
 ## Installation
 
 ```bash
-pip install terminal-formatter
+pip install formatting-library
 ```
 
 ## Quick Start
