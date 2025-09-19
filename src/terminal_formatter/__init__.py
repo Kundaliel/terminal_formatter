@@ -8,6 +8,7 @@ from .core import (
     Printer,
     ImprovedColors,
     ImageRenderer,
+    CBuilder,
     
     # Aliases
     clear_screen,
@@ -32,6 +33,6 @@ from .core import (
     COLORS,
 )
 
-__version__ = "0.0.1"
+__version__ = "1.1.1"
 __author__ = "Kundaliel"
 __email__ = "kundaliel.official@gmail.com"

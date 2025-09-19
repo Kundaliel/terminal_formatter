@@ -13,6 +13,7 @@ A Python library for terminal text formatting, colors, and ASCII art rendering.
 - Animated/slow printing
 - Text color codes
 - Terminal cursor control and manipulation
+- C library integration for performance-critical operations
 
 ## Installation
 
@@ -188,6 +189,50 @@ Terminal.replace_line(5, "New content for line 5")
 Terminal.set_cursor_position(1, 1)  # Top-left corner
 ```
 
+### C Library Integration
+
+⚠️ **Security Warning**: The CBuilder class uses `os.system()` to compile C code and creates directories on your filesystem. Only use with trusted C source files and in secure environments. The build process will:
+- Execute GCC compiler commands via shell
+- Create a `build/` directory in the specified location
+- Generate `.so` shared library files
+- Overwrite existing files with the same name
+
+For performance-critical operations, you can compile and use C libraries:
+
+```c
+// main.c
+#include <stdio.h>
+#include <stdint.h>
+
+void say(char *input) {
+    printf("%s\n", input);
+}
+
+int fast_multiply(int a, int b) {
+    return a * b;
+}
+```
+
+```python
+# main.py
+from terminal_formatter import CBuilder
+import ctypes
+
+# Build the C library
+builder = CBuilder(".", "main")
+
+# Define functions with proper types
+say = builder.define_function("say", [ctypes.c_char_p])
+multiply = builder.define_function("fast_multiply", 
+                                 [ctypes.c_int, ctypes.c_int], 
+                                 ctypes.c_int)
+
+# Use the functions
+say(b"Hello from C!")
+result = multiply(42, 24)
+print(f"42 * 24 = {result}")
+```
+
 ## Color Reference
 
 ### Rainbow Colors
@@ -225,6 +270,7 @@ The built-in rainbow uses these RGB values:
 
 - Python 3.8+
 - Pillow (for image processing)
+- GCC (for C library compilation)
 
 ## Examples
 
@@ -262,6 +308,35 @@ for filename in os.listdir("images/"):
         print(img_to_ascii(f"images/{filename}"))
 ```
 
+### Performance Comparison
+
+```python
+from terminal_formatter import CBuilder, ctypes
+import time
+
+# Python version
+def python_factorial(n):
+    if n <= 1:
+        return 1
+    return n * python_factorial(n - 1)
+
+# C version (factorial.c)
+builder = CBuilder(".", "factorial")
+c_factorial = builder.define_function("factorial", [ctypes.c_int], ctypes.c_int)
+
+# Benchmark
+start = time.time()
+python_result = python_factorial(20)
+python_time = time.time() - start
+
+start = time.time()
+c_result = c_factorial(20)
+c_time = time.time() - start
+
+print(f"Python: {python_result} ({python_time:.6f}s)")
+print(f"C: {c_result} ({c_time:.6f}s)")
+```
+
 ## License
 
 MIT License - see LICENSE file for details.
@@ -269,3 +344,18 @@ MIT License - see LICENSE file for details.
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
+
+## Changelog
+
+### v1.1.0
+- Added CBuilder class for C library integration
+- Support for compiling and loading C shared libraries
+- Dynamic function binding with ctypes
+- Performance optimization through C extensions
+
+### v1.0.0
+- Initial release with RGB color support
+- Rainbow text effects
+- Image to ASCII conversion
+- Terminal control functions
+- Text formatting utilities
