@@ -356,15 +356,15 @@ for filename in os.listdir("images/"):
 from terminal_formatter import runBefunge, runLOLCODE
 
 # Create a simple Befunge program
-with open("countdown.bf", "w") as f:
+with open("hello.bf", "w") as f:
     f.write("""\
->                                        v
-@,*25,++:*:*:+111,,,,,,,,,,,"Hello World"<
+>                                            v
+@,*25,++:*:*:+111,,,,,,,,,,,,,"Hello Befunge"<
     """)
 
 # Run it
-print("Running Befunge countdown:")
-runBefunge("countdown.bf")
+print("Running Befunge greeting:")
+runBefunge("hello.bf")
 
 # Create a LOLCODE program
 with open("greeting.lol", "w") as f:
