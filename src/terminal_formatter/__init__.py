@@ -36,6 +36,6 @@ from .core import (
     COLORS,
 )
 
-__version__ = "1.2.4"
+__version__ = "1.2.4.1"
 __author__ = "Kundaliel"
 __email__ = "kundaliel.official@gmail.com"
