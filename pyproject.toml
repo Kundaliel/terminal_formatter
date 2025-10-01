@@ -47,10 +47,10 @@ dev = [
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/terminal_formatter"]
-
-# Include binary files in the package
-[tool.hatch.build.targets.wheel.force-include]
-"src/terminal_formatter/_bin" = "terminal_formatter/_bin"
+# Only use artifacts, not force-include
+artifacts = [
+    "src/terminal_formatter/_bin/**/*",
+]
 
 [tool.hatch.build.targets.sdist]
 include = [
