@@ -369,15 +369,20 @@ class CBuilder:
         }
 
 class Esoteric:
+    @staticmethod
+    def _get_bin_path():
+        module_dir = Path(__file__).parent
+        return module_dir / "_bin"
+    
     EXECUTABLES = {
         "befunge": {
-            "linux": "./_bin/linux/bef98",
-            "darwin": "./_bin/darwin/bef98",
+            "linux": "linux/bef98",
+            "darwin": "darwin/bef98",
         },
         "lolcode": {
-            "darwin": "./_bin/darwin/lci",
-            "linux": "./_bin/linux/lci",
-            "windows": "./_bin/windows/lci.exe",
+            "darwin": "darwin/lci",
+            "linux": "linux/lci",
+            "windows": "windows/lci.exe",
         }
     }
 
@@ -386,30 +391,39 @@ class Esoteric:
         if not filename:
             raise ValueError("Filename cannot be empty")
         
-        if not Path(filename).is_file():
-            raise FileNotFoundError(f"Source file not found: {filename}")
-        
         platform_name = platform.system().lower()
         executables = Esoteric.EXECUTABLES.get(language)
         
         if executables is None:
             raise ValueError(f"Unknown language: {language}")
         
-        executable_path = executables.get(platform_name)
+        executable_rel_path = executables.get(platform_name)
         
-        if executable_path is None:
+        if executable_rel_path is None:
             raise RuntimeError(
                 f"{platform_name} is currently not supported for {language}."
             )
         
-        if not Path(executable_path).is_file():
+        bin_path = Esoteric._get_bin_path()
+        executable_path = bin_path / executable_rel_path
+        
+        if not executable_path.is_file():
             raise FileNotFoundError(
-                f"Executable not found: {executable_path}"
+                f"Executable not found: {executable_path}\n"
+                f"Bin directory: {bin_path}\n"
+                f"Bin exists: {bin_path.exists()}\n"
+                f"Contents: {list(bin_path.rglob('*')) if bin_path.exists() else 'N/A'}"
             )
+        
+        if platform_name in ['linux', 'darwin']:
+            try:
+                os.chmod(executable_path, 0o755)
+            except Exception as e:
+                print(f"Warning: Could not set executable permissions: {e}")
         
         try:
             result = subprocess.run(
-                [executable_path, filename],
+                [str(executable_path), filename],
                 check=True,
                 capture_output=False
             )
