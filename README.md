@@ -14,6 +14,7 @@ A Python library for terminal text formatting, colors, and ASCII art rendering.
 - Text color codes
 - Terminal cursor control and manipulation
 - C library integration for performance-critical operations
+- Esoteric programming language execution (Befunge, LOLCODE)
 
 ## Installation
 
@@ -189,6 +190,46 @@ Terminal.replace_line(5, "New content for line 5")
 Terminal.set_cursor_position(1, 1)  # Top-left corner
 ```
 
+### Esoteric Programming Languages
+
+Execute esoteric programming languages directly from Python:
+
+```python
+from terminal_formatter import Esoteric, runBefunge, runLOLCODE
+
+# Run Befunge programs
+Esoteric.runBefunge("hello.bf")
+
+# Run LOLCODE programs
+Esoteric.runLOLCODE("hello.lol")
+
+# Or use the convenient aliases
+runBefunge("program.bf")
+runLOLCODE("script.lol")
+```
+
+**Supported Languages:**
+- **Befunge**: A two-dimensional esoteric programming language
+  - Supported platforms: Linux, macOS
+- **LOLCODE**: An esoteric language based on lolspeak
+  - Supported platforms: Linux, macOS, Windows
+
+**Requirements:**
+- Language interpreters are included in the package under `_bin/` directory
+- Executables are platform-specific and selected automatically
+
+**Example Befunge Program (hello.bf):**
+```befunge
+"!dlroW ,olleH">:#,_@
+```
+
+**Example LOLCODE Program (hello.lol):**
+```lolcode
+HAI 1.2
+  VISIBLE "Hello, World!"
+KTHXBYE
+```
+
 ### C Library Integration
 
 ⚠️ **Security Warning**: The CBuilder class uses `os.system()` to compile C code and creates directories on your filesystem. Only use with trusted C source files and in secure environments. The build process will:
@@ -271,6 +312,7 @@ The built-in rainbow uses these RGB values:
 - Python 3.8+
 - Pillow (for image processing)
 - GCC (for C library compilation)
+- Platform-specific esoteric language interpreters (included in package)
 
 ## Examples
 
@@ -306,6 +348,35 @@ for filename in os.listdir("images/"):
     if filename.lower().endswith(('.png', '.jpg', '.jpeg')):
         print(f"\n--- {filename} ---")
         print(img_to_ascii(f"images/{filename}"))
+```
+
+### Esoteric Language Runner
+
+```python
+from terminal_formatter import runBefunge, runLOLCODE
+
+# Create a simple Befunge program
+with open("countdown.bf", "w") as f:
+    f.write("""\
+>                                        v
+@,*25,++:*:*:+111,,,,,,,,,,,"Hello World"<
+    """)
+
+# Run it
+print("Running Befunge countdown:")
+runBefunge("countdown.bf")
+
+# Create a LOLCODE program
+with open("greeting.lol", "w") as f:
+    f.write("""
+HAI 1.4
+  VISIBLE "O HAI, can I haz cheezburger?"
+KTHXBYE
+""")
+
+# Run it
+print("\nRunning LOLCODE greeting:")
+runLOLCODE("greeting.lol")
 ```
 
 ### Performance Comparison
@@ -349,8 +420,9 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ### v1.2.0
 - Added Esoteric class for running esoteric programming languages
-- Support for Befunge and LOLCODE execution across platforms
-- New aliases: runBefunge and runLOLCODE
+- Support for Befunge execution on Linux and macOS
+- Support for LOLCODE execution on Linux, macOS, and Windows
+- New convenience aliases: `runBefunge` and `runLOLCODE`
 
 ### v1.1.0
 - Added CBuilder class for C library integration

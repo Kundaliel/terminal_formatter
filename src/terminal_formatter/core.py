@@ -383,9 +383,11 @@ class Esoteric:
 
     @staticmethod
     def _run_language(language, filename=''):
-        """Generic method to run an esoteric language."""
         if not filename:
             raise ValueError("Filename cannot be empty")
+        
+        if not Path(filename).is_file():
+            raise FileNotFoundError(f"Source file not found: {filename}")
         
         platform_name = platform.system().lower()
         executables = Esoteric.EXECUTABLES.get(language)
