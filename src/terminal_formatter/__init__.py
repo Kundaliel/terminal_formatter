@@ -9,6 +9,7 @@ from .core import (
     ImprovedColors,
     ImageRenderer,
     CBuilder,
+    Esoteric,
     
     # Aliases
     clear_screen,
@@ -25,6 +26,8 @@ from .core import (
     rgb_back,
     formatted,
     img_to_ascii,
+    runBefunge,
+    runLOLCODE,
     
     # Variables
     IMAGE_CHARACTER,
@@ -33,6 +36,6 @@ from .core import (
     COLORS,
 )
 
-__version__ = "1.1.1"
+__version__ = "1.2.0"
 __author__ = "Kundaliel"
 __email__ = "kundaliel.official@gmail.com"

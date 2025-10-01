@@ -347,6 +347,11 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## Changelog
 
+### v1.2.0
+- Added Esoteric class for running esoteric programming languages
+- Support for Befunge and LOLCODE execution across platforms
+- New aliases: runBefunge and runLOLCODE
+
 ### v1.1.0
 - Added CBuilder class for C library integration
 - Support for compiling and loading C shared libraries

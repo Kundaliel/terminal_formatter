@@ -10,6 +10,8 @@ from dataclasses import dataclass, field
 from PIL import Image # type: ignore
 import ctypes
 import os
+import platform
+import subprocess
 
 # ========= #
 # Variables # 
@@ -247,8 +249,8 @@ class ImageRenderer:
             for y in range(0, height - 1, 2):
                 line_parts = []
                 for x in range(width):
-                    top_pixel = RGB(*image.getpixel((x, y)))
-                    bottom_pixel = RGB(*image.getpixel((x, y + 1)))
+                    top_pixel = RGB(*image.getpixel((x, y))) # type: ignore
+                    bottom_pixel = RGB(*image.getpixel((x, y + 1))) # type: ignore
                     
                     color_code = top_pixel.to_dual(bottom_pixel)
                     line_parts.append(f"{color_code}{IMAGE_CHARACTER}")
@@ -258,7 +260,7 @@ class ImageRenderer:
             if height % 2 == 1:
                 line_parts = []
                 for x in range(width):
-                    top_pixel = RGB(*image.getpixel((x, height - 1)))
+                    top_pixel = RGB(*image.getpixel((x, height - 1))) # type: ignore
                     bottom_pixel = RGB(255, 255, 255)
                     
                     color_code = top_pixel.to_dual(bottom_pixel)
@@ -267,10 +269,6 @@ class ImageRenderer:
                 lines.append(''.join(line_parts) + RESET)
         
         return '\n'.join(lines)
-
-import platform
-import os
-import ctypes
 
 class CBuilder:
     """
@@ -369,6 +367,63 @@ class CBuilder:
             'python_architecture': platform.architecture(),
             'machine': platform.machine()
         }
+
+class Esoteric:
+    EXECUTABLES = {
+        "befunge": {
+            "linux": "./_bin/linux/bef98",
+            "darwin": "./_bin/darwin/bef98",
+        },
+        "lolcode": {
+            "darwin": "./_bin/darwin/lci",
+            "linux": "./_bin/linux/lci",
+            "windows": "./_bin/windows/lci.exe",
+        }
+    }
+
+    @staticmethod
+    def _run_language(language, filename=''):
+        """Generic method to run an esoteric language."""
+        if not filename:
+            raise ValueError("Filename cannot be empty")
+        
+        platform_name = platform.system().lower()
+        executables = Esoteric.EXECUTABLES.get(language)
+        
+        if executables is None:
+            raise ValueError(f"Unknown language: {language}")
+        
+        executable_path = executables.get(platform_name)
+        
+        if executable_path is None:
+            raise RuntimeError(
+                f"{platform_name} is currently not supported for {language}."
+            )
+        
+        if not Path(executable_path).is_file():
+            raise FileNotFoundError(
+                f"Executable not found: {executable_path}"
+            )
+        
+        try:
+            result = subprocess.run(
+                [executable_path, filename],
+                check=True,
+                capture_output=False
+            )
+            return result.returncode
+        except subprocess.CalledProcessError as e:
+            raise RuntimeError(f"Execution failed with code {e.returncode}")
+
+    @staticmethod
+    def runBefunge(filename=''):
+        return Esoteric._run_language("befunge", filename)
+
+    @staticmethod
+    def runLOLCODE(filename=''):
+        return Esoteric._run_language("lolcode", filename)
+
+    
     
 # ======= #
 # Aliases #
@@ -394,3 +449,6 @@ COLORS = ImprovedColors()
 formatted = COLORS.format_text
 
 img_to_ascii = ImageRenderer.image_to_ascii
+
+runBefunge = Esoteric.runBefunge
+runLOLCODE = Esoteric.runLOLCODE

@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "formatting-library"
-version = "1.1.1"
+version = "1.2.0"
 description = "A Python library for terminal text formatting, colors, and ASCII art"
 readme = "README.md"
 license = {file = "LICENSE"}
@@ -47,3 +47,6 @@ dev = [
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/terminal_formatter"]
+
+[tool.setuptools.package-data]
+terminal_formatter = ["_bin/*"]
